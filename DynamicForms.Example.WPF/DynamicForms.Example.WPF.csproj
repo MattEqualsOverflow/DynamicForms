@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DynamicForms.Core\DynamicForms.Core.csproj" />
+      <ProjectReference Include="..\DynamicForms.Example.Shared\DynamicForms.Example.Shared.csproj" />
+      <ProjectReference Include="..\DynamicForms.WPF\DynamicForms.WPF.csproj" />
+    </ItemGroup>
+
+</Project>

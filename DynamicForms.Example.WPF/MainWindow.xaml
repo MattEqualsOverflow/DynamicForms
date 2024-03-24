@@ -1,0 +1,39 @@
+﻿<Window x:Class="DynamicForms.Example.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DynamicForms.Example.WPF"
+        xmlns:wpf="clr-namespace:DynamicForms.WPF;assembly=DynamicForms.WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainWindowViewModel></local:MainWindowViewModel>
+    </Window.DataContext>
+    <DockPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <CheckBox Grid.Column="0" Margin="5 0 0 5">Advanced Mode</CheckBox>
+            <Button Grid.Column="1" Margin="0 0 5 5" Padding="3 0" Click="ButtonBase_OnClick">Test</Button>
+        </Grid>
+        <TabControl Margin="5">
+            <TabItem Header="Basic">
+                <Grid Margin="5">
+                    <wpf:DynamicFormControl Data="{Binding ExampleSettings}"></wpf:DynamicFormControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Game Mode">
+                <TextBox Name="OutputTextBox">
+                    
+                </TextBox>
+            </TabItem>
+            <TabItem Header="Logic"></TabItem>
+            <TabItem Header="Patches"></TabItem>
+            <TabItem Header="Items &amp; Locations"></TabItem>
+            <TabItem Header="Customization"></TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

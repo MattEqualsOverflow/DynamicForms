@@ -4,32 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avalonia="clr-namespace:DynamicForms.Avalonia;assembly=DynamicForms.Avalonia"
+        xmlns:controls="clr-namespace:AvaloniaControls.Controls;assembly=AvaloniaControls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="1024" Height="768"
         x:Class="DynamicForms.Example.Avalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="DynamicForms.Example.Avalonia" 
-        Padding="10">
-
+        Title="DynamicForms.Example.Avalonia" >
     <Grid>
         <DockPanel Name="MainDockPanel">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
-                <Button Click="Button_OnClick">View Results</Button>
-                <Button Click="TestButton_OnClick">test</Button>
-            </StackPanel>
-            <TabControl>
-                <TabItem Header="Test 1">
+            <controls:HeaderFooter DockPanel.Dock="Bottom">
+                <Grid ColumnDefinitions="*, Auto" Margin="5">
+                    <CheckBox Grid.Column="0">Advanced Mode</CheckBox>
+                    <Button Grid.Column="1" Padding="3 0" Click="Button_OnClick">Test</Button>
+                </Grid>
+            </controls:HeaderFooter>
+            <TabControl Margin="5">
+                <TabItem Header="Basic">
                     <avalonia:DynamicFormControl Data="{Binding Example}"></avalonia:DynamicFormControl>
                 </TabItem>
-                <TabItem Header="Test 2">
-                    <TextBlock>test</TextBlock>
+                <TabItem Header="Game Mode">
+                    <TextBox Name="OutputTextBox">
+                    </TextBox>
                 </TabItem>
+                <TabItem Header="Logic"></TabItem>
+                <TabItem Header="Patches"></TabItem>
+                <TabItem Header="Items &amp; Locations"></TabItem>
+                <TabItem Header="Customization"></TabItem>
             </TabControl>
         </DockPanel>
-        <TextBox IsReadOnly="True" IsVisible="False" Name="OutputTextBox">
-            
-        </TextBox>
     </Grid>
 
 </Window>

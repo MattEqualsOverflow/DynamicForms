@@ -16,20 +16,6 @@ public partial class MainWindow : Window
 
     private void Button_OnClick(object? sender, RoutedEventArgs e)
     {
-        this.Find<DockPanel>(nameof(MainDockPanel))!.IsVisible = false;
-        this.Find<TextBox>(nameof(OutputTextBox))!.IsVisible = true;
         this.Find<TextBox>(nameof(OutputTextBox))!.Text = JsonSerializer.Serialize(DataContext as MainWindowViewModel, new JsonSerializerOptions() {  WriteIndented = true});
-    }
-
-    private void TestButton_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is not MainWindowViewModel viewModel)
-        {
-            return;
-        }
-
-        var property = viewModel.Example.GetType().GetProperties()
-            .First(x => x.Name == nameof(viewModel.Example.TestCheckbox));
-        property.SetValue(viewModel.Example, true);
     }
 }
