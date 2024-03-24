@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="DynamicForms.Avalonia/DynamicFormControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/DynamicFormLabeldFieldVertical.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/DynamicFormLabeledFieldVertical.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/DynamicFormTextBlock.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/DynamicFormTextBox.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/DynamicForms.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/DynamicFormsTextBlock.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/DynamicformCheckBox.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Example.Avalonia/App.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Example.Avalonia/Views/MainWindow.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

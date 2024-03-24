@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DynamicForms.Example.Avalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonia="clr-namespace:DynamicForms.Avalonia;assembly=DynamicForms.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="1024" Height="768"
+        x:Class="DynamicForms.Example.Avalonia.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="DynamicForms.Example.Avalonia" 
+        Padding="10">
+
+    <Grid>
+        <DockPanel Name="MainDockPanel">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
+                <Button Click="Button_OnClick">View Results</Button>
+                <Button Click="TestButton_OnClick">test</Button>
+            </StackPanel>
+            <TabControl>
+                <TabItem Header="Test 1">
+                    <avalonia:DynamicFormControl Data="{Binding Example}"></avalonia:DynamicFormControl>
+                </TabItem>
+                <TabItem Header="Test 2">
+                    <TextBlock>test</TextBlock>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+        <TextBox IsReadOnly="True" IsVisible="False" Name="OutputTextBox">
+            
+        </TextBox>
+    </Grid>
+
+</Window>
