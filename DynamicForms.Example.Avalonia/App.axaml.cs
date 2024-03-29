@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using AvaloniaControls.Controls;
 using DynamicForms.Example.Avalonia.ViewModels;
 using DynamicForms.Example.Avalonia.Views;
 
@@ -21,6 +22,7 @@ public partial class App : Application
             {
                 DataContext = new MainWindowViewModel(),
             };
+            MessageWindow.GlobalParentWindow = desktop.MainWindow;
         }
 
         base.OnFrameworkInitializationCompleted();

@@ -7,11 +7,46 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MattEqualsCoder.AvaloniaControls" Version="0.9.7" />
+      <PackageReference Include="MattEqualsCoder.AvaloniaControls" Version="0.9.10" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\DynamicForms.Core\DynamicForms.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Fields\DynamicFormLabeledFieldSideBySide.axaml.cs">
+        <DependentUpon>DynamicFormLabeledFieldSideBySide.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Fields\DynamicFormLabeledFieldVertical.axaml.cs">
+        <DependentUpon>DynamicFormLabeledFieldVertical.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="GroupOuters\DynamicFormGroupOuterBasic.axaml.cs">
+        <DependentUpon>DynamicFormGroupOuterBasic.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Fields\DynamicFormColorPicker.axaml.cs">
+        <DependentUpon>DynamicFormColorPicker.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="DynamicFormControl.axaml.cs">
+        <DependentUpon>DynamicFormControl.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Groups\DynamicFormGroupTypeTwoColumn.axaml.cs">
+        <DependentUpon>DynamicFormGroupTypeTwoColumn.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Groups\DynamicFormGroupTypeVertical.axaml.cs">
+        <DependentUpon>DynamicFormGroupTypeVertical.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Fields\DynamicFormSliderControl.axaml.cs">
+        <DependentUpon>DynamicFormSliderControl.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
 </Project>

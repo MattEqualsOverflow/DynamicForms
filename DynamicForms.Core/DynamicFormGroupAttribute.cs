@@ -1,12 +1,11 @@
 namespace DynamicForms.Core;
 
-[AttributeUsage(AttributeTargets.Property | AttributeTargets.Class)]
-public class DynamicFormGroupAttribute : Attribute
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class DynamicFormGroupAttribute(DynamicFormGroupStyle style, DynamicFormGroupType type, string name = "", string? parentGroup = null, int order = 1000) : Attribute
 {
-    public DynamicFormGroupAttribute(string groupName = "")
-    {
-        GroupName = groupName;
-    }
-    
-    public string GroupName { get; init; }
+    public DynamicFormGroupStyle Style => style;
+    public DynamicFormGroupType Type => type;
+    public string Name => name;
+    public string? ParentGroup => parentGroup;
+    public int Order => order;
 }

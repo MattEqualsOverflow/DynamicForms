@@ -6,5 +6,8 @@ public enum DynamicFormFieldType
     TextBox,
     CheckBox,
     ComboBox,
-    Enum
+    Slider,
+    ColorPicker,
+    FilePicker,
+    NumericUpDown
 }

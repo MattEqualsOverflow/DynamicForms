@@ -3,6 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
+using AvaloniaControls.Controls;
+using DynamicForms.Avalonia.Groups;
 using DynamicForms.Core;
 
 namespace DynamicForms.Avalonia;
@@ -51,18 +53,50 @@ public partial class DynamicFormControl : UserControl
 
         var dockPanel = this.Find<DockPanel>(nameof(ParentPanel))!;
 
-        var verticalPanel = new StackPanel()
+        var mainGroupControl = CreateFormGroup(dynamicForm.ParentGroup.GroupName, dynamicForm.ParentGroup.Style,
+            dynamicForm.ParentGroup.Type,
+            dynamicForm.ParentGroup.Objects);
+
+        dockPanel.Children.Add(mainGroupControl);
+    }
+
+    private Control CreateFormGroup(string groupName, DynamicFormGroupStyle style, DynamicFormGroupType type, List<DynamicFormObject> groupObjects)
+    {
+        DynamicFormGroupStyleControl groupStyleControl = style switch
         {
-            Orientation = Orientation.Vertical
+            DynamicFormGroupStyle.Basic => new DynamicFormGroupStyleBasic(),
+            DynamicFormGroupStyle.GroupBox => new DynamicFormGroupStyleGroupBox(groupName),
+            DynamicFormGroupStyle.Expander => new DynamicFormGroupStyleExpander(groupName),
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
+            
+        DynamicFormGroupTypeControl groupTypeControl = type switch
+        {
+            DynamicFormGroupType.Vertical => new DynamicFormGroupTypeControlVertical(),
+            DynamicFormGroupType.TwoColumns => new DynamicFormGroupTypeControlTwoColumn(),
+            DynamicFormGroupType.SideBySide => new DynamicFormGroupTypeControlSideBySide(),
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
-        foreach (var field in dynamicForm.ParentGroup.Objects.Cast<DynamicFormField>())
+        foreach (var formObject in groupObjects)
         {
-            //verticalPanel.Children.Add(new Label() { Content = field.Attributes.DisplayName} );
-            //verticalPanel.Children.Add(new TextBox() { Text = field.Attributes.DisplayName} );
-            verticalPanel.Children.Add(new DynamicFormLabeledFieldVertical(field));
+            if (formObject is DynamicFormField field)
+            {
+                groupTypeControl.AddField(field);
+            }
+            else if (formObject is DynamicFormGroup group)
+            {
+                var subGroupControl = CreateFormGroup(group.GroupName, group.Style, group.Type, group.Objects);
+                groupTypeControl.AddControl(subGroupControl);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Unknown object type {formObject.GetType().Name}");
+            }
         }
         
-        dockPanel.Children.Add(verticalPanel);
+        groupStyleControl.AddBody(groupTypeControl);
+
+        return groupStyleControl;
     }
 }

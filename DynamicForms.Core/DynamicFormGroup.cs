@@ -1,45 +1,116 @@
 using System.Reflection;
+using DynamicForms.Core.FieldAttributes;
 
 namespace DynamicForms.Core;
 
 public class DynamicFormGroup : DynamicFormObject
 {
-    public override bool IsGroup => true;
+    private string _parentGroupName;
 
-    public DynamicFormGroup(object value, DynamicFormGroupAttribute attributes, PropertyInfo? propertyInfo)
+    public DynamicFormGroup(object value, string parentGroupName)
+    {
+        var attribute = value.GetType().GetCustomAttributes(true).FirstOrDefault(x => x is DynamicFormAttribute) as DynamicFormAttribute 
+                        ?? new DynamicFormAttribute(DynamicFormGroupStyle.Basic, DynamicFormGroupType.Vertical);
+        Value = value;
+        GroupName = attribute.Name;
+        _parentGroupName = parentGroupName;
+        Style = attribute.Style;
+        Type = attribute.Type;
+        
+        AddFormObjects(value);
+    }
+    
+    public DynamicFormGroup(object value, string groupName, string parentGroupName, DynamicFormGroupStyle style, DynamicFormGroupType type)
     {
         Value = value;
-        Attributes = attributes;
-        Property = propertyInfo;
-        
-        foreach (var prop in value.GetType().GetProperties())
+        GroupName = groupName;
+        _parentGroupName = parentGroupName;
+        Style = style;
+        Type = type;
+    }
+    
+    public string GroupName { get; init; }
+    public DynamicFormGroupStyle Style { get; init; }
+    public DynamicFormGroupType Type { get; init; }
+    public override bool IsGroup => true;
+    public override string ParentGroupName => _parentGroupName;
+
+    private void AddFormObjects(object value)
+    {
+        var subGroupAttributes = value.GetType().GetCustomAttributes()
+            .Where(x => x is DynamicFormGroupAttribute)
+            .Cast<DynamicFormGroupAttribute>()
+            .OrderBy(x => x.Order)
+            .ToList();
+
+        var subGroups = subGroupAttributes
+            .Where(x => x.ParentGroup == null)
+            .Select(x => new DynamicFormGroup(value, x.Name, GroupName, x.Style, x.Type))
+            .ToList();
+
+        var subGroupMap = subGroups.ToDictionary(x => x.GroupName, x => x);
+
+        foreach (var childSubgroupAttribute in subGroupAttributes
+                     .Where(x => x.ParentGroup != null))
         {
-            var propValue = prop.GetValue(value);
-            var customAttributes = prop.GetCustomAttributes(true);
-            foreach (var customAttribute in customAttributes)
+            var parentSubgroup = subGroups.FirstOrDefault(x => x.GroupName == childSubgroupAttribute.ParentGroup) ??
+                                 subGroups.First();
+            var childSubgroup = new DynamicFormGroup(value, childSubgroupAttribute.Name, parentSubgroup.GroupName,
+                childSubgroupAttribute.Style, childSubgroupAttribute.Type);
+            parentSubgroup.Objects.Add(childSubgroup);
+            subGroupMap.Add(childSubgroupAttribute.Name, childSubgroup); 
+        }
+
+        var hasSubGroups = subGroups.Count != 0;
+        Objects.AddRange(subGroups);
+        
+        foreach (var childObject in GetObjectsFrom(value))
+        {
+            if (hasSubGroups)
             {
-                if (customAttribute is DynamicFormFieldAttribute fieldAttribute)
-                {
-                    Objects.Add(new DynamicFormField(value, propValue, prop, fieldAttribute));
-                    break;
-                }
-                else if (customAttribute is DynamicFormGroupAttribute groupAttribute)
-                {
-                    if (propValue == null)
-                    {
-                        throw new InvalidOperationException("DynamicFormGroups cannot be null");
-                    }
-                    
-                    Objects.Add(new DynamicFormGroup(propValue, groupAttribute, prop));
-                    break;
-                }
+                subGroupMap.TryGetValue(childObject.ParentGroupName, out var parentGroup);
+                parentGroup ??= subGroups.First();
+                parentGroup.Objects.Add(childObject);
+            }
+            else
+            {
+                Objects.Add(childObject);
             }
         }
     }
+    
+    private List<DynamicFormObject> GetObjectsFrom(object parentObject)
+    {
+        List<DynamicFormObject> toReturn = [];
+
+        var items = parentObject.GetType().GetProperties()
+            .Select(x => (Property: x,
+                Attributes: x.GetCustomAttributes(true).FirstOrDefault(a => a is DynamicFormObjectAttribute)))
+            .Where(x => x.Attributes != null)
+            .OrderBy(x => ((DynamicFormObjectAttribute?)x.Attributes)?.Order ?? 1000);
+        
+        foreach (var item in items)
+        {
+            var propValue = item.Property.GetValue(parentObject);
+            if (item.Attributes is DynamicFormFieldAttribute fieldAttribute)
+            {
+                toReturn.Add(new DynamicFormField(parentObject, propValue, item.Property, fieldAttribute, fieldAttribute.GroupName));
+            } 
+            else if (item.Attributes is DynamicFormObjectAttribute subObjectAttribute)
+            {
+                if (propValue == null)
+                {
+                    throw new InvalidOperationException("DynamicFormGroups cannot be null");
+                }
+                    
+                toReturn.Add(new DynamicFormGroup(propValue, subObjectAttribute.GroupName));
+            }
+        }
+
+        return toReturn;
+    }
 
     public List<DynamicFormObject> Objects { get; set; } = [];
-    public object Value { get; init; }
-    public PropertyInfo? Property { get; init; }
-    public DynamicFormGroupAttribute Attributes { get; init; }
+    public object? Value { get; init; }
     
 }

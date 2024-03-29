@@ -18,4 +18,17 @@
       <ProjectReference Include="..\DynamicForms.Avalonia\DynamicForms.Avalonia.csproj" />
       <ProjectReference Include="..\DynamicForms.Example.Shared\DynamicForms.Example.Shared.csproj" />
     </ItemGroup>
+
+
+    <ItemGroup>
+      <None Update="rash.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Shak's Stash by Phiggle.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="yoshi.1.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 </Project>

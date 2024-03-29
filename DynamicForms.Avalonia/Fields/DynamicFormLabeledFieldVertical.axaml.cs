@@ -1,13 +1,14 @@
 using Avalonia.Controls;
 using DynamicForms.Core;
 
-namespace DynamicForms.Avalonia;
+namespace DynamicForms.Avalonia.Fields;
 
 public partial class DynamicFormLabeledFieldVertical : DynamicFormLabeledField
 {
     public DynamicFormLabeledFieldVertical(DynamicFormField formField) : base(formField)
     {
         InitializeComponent();
+        
         if (formField.Attributes.FieldType == DynamicFormFieldType.CheckBox)
         {
             this.Find<TextBlock>(nameof(MainLabel))!.IsVisible = false;
@@ -16,6 +17,7 @@ public partial class DynamicFormLabeledFieldVertical : DynamicFormLabeledField
         {
             this.Find<TextBlock>(nameof(MainLabel))!.Text = formField.Attributes.DisplayName;
         }
+        
         this.Find<StackPanel>(nameof(StackPanel))!.Children.Add(BodyControl);
     }
 }

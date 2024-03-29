@@ -1,21 +1,16 @@
 using System.Reflection;
+using DynamicForms.Core.FieldAttributes;
 
 namespace DynamicForms.Core;
 
-public class DynamicFormField : DynamicFormObject
+public class DynamicFormField(object parent, object? value, PropertyInfo property, DynamicFormFieldAttribute attribute, string groupName) : DynamicFormObject
 {
     public override bool IsGroup => false;
 
-    public DynamicFormField(object parent, object? value, PropertyInfo property, DynamicFormFieldAttribute attribute)
-    {
-        ParentObject = parent;
-        Value = value;
-        Property = property;
-        Attributes = attribute;
-    }
+    public object ParentObject => parent;
     
-    public object ParentObject { get; set; }
-    public object? Value { get; set; }
-    public PropertyInfo Property { get; set; }
-    public DynamicFormFieldAttribute Attributes { get; set; }
+    public object? Value { get; set; } = value;
+    public PropertyInfo Property => property;
+    public DynamicFormFieldAttribute Attributes => attribute;
+    public override string ParentGroupName => groupName;
 }
