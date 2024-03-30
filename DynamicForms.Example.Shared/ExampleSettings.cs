@@ -61,19 +61,19 @@ public class ExampleSettings : INotifyPropertyChanged
     [DynamicFormColorPicker("Test Color Picker")]
     public byte[] ColorPicker { get; set; } = [0xFF, 0x21, 0x21, 0x21];
     
-    [DynamicFormFilePicker("Test File Picker", FilePickerType.OpenFile, "SNES ROMs:*.sfc,*.smc)", "21f3e98df4780ee1c667b84e57d88675", "Bad SM File!")]
+    [DynamicFormFilePicker("Test File Picker", FilePickerType.OpenFile, "SNES ROMs (*.sfc, *.smc)|*.sfc;*.smc|All files (*.*)|*.*", "21f3e98df4780ee1c667b84e57d88675", "Bad SM File!")]
     public string TestFilePicker { get; set; } = "";
     
     [DynamicFormFilePicker("Test Folder Picker", FilePickerType.Folder)]
     public string TestFolderPicker { get; set; } = "";
     
-    [DynamicFormNumeric("Int NumericUpDown", groupName: "Group 2 Subgroup")]
+    [DynamicFormNumericUpDown("Int NumericUpDown", groupName: "Group 2 Subgroup")]
     public int IntNumericUpDown { get; set; }
     
-    [DynamicFormNumeric("Double NumericUpDown", increment: 0.1, groupName: "Group 2 Subgroup")]
+    [DynamicFormNumericUpDown("Double NumericUpDown", increment: 0.1, groupName: "Group 2 Subgroup")]
     public double DoubleNumericUpDown { get; set; }
     
-    [DynamicFormNumeric("Decimal NumericUpDown", increment: 0.25, groupName: "Group 2 Subgroup")]
+    [DynamicFormNumericUpDown("Decimal NumericUpDown", increment: 0.25, groupName: "Group 2 Subgroup")]
     public decimal DecimalNumericUpDown { get; set; }
 
     [DynamicFormObject("Group 1")]

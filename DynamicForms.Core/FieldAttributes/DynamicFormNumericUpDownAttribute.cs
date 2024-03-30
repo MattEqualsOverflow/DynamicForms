@@ -1,7 +1,7 @@
 namespace DynamicForms.Core.FieldAttributes;
 
 [AttributeUsage((AttributeTargets.Property))]
-public class DynamicFormNumericAttribute(
+public class DynamicFormNumericUpDownAttribute(
     string displayName,
     double increment = 1,
     double minValue = int.MinValue,

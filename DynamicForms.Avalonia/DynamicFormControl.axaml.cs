@@ -16,7 +16,6 @@ public partial class DynamicFormControl : UserControl
     public DynamicFormControl()
     {
         InitializeComponent();
-        var data = Data;
     }
     
     public static readonly StyledProperty<object?> DataProperty = AvaloniaProperty.Register<DynamicFormControl, object?>(

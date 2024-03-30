@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using DynamicForms.Core;
+using DynamicForms.Core.FieldAttributes;
+using DynamicForms.WPF.Fields;
 
 namespace DynamicForms.WPF;
 
@@ -25,9 +27,20 @@ public class DynamicFormLabeledField : UserControl
             case DynamicFormFieldType.ComboBox:
                 BodyControl = GetComboBox(formField);
                 break;
-            case DynamicFormFieldType.Enum:
-                BodyControl = GetEnumComboBox(formField);
+            case DynamicFormFieldType.Slider:
+                BodyControl = GetSlider(formField);
                 break;
+            case DynamicFormFieldType.ColorPicker:
+                BodyControl = GetColorPicker(formField);
+                break;
+            case DynamicFormFieldType.FilePicker:
+                BodyControl = GetFilePicker(formField);
+                break;
+            case DynamicFormFieldType.NumericUpDown:
+                BodyControl = GetNumericUpDown(formField);
+                break;
+            default:
+                throw new InvalidOperationException("Unknown DynamicFormFieldType");
         }
         
         if (BodyControl != null && !string.IsNullOrEmpty(formField.Attributes.VisibleWhenProperty))
@@ -144,8 +157,56 @@ public class DynamicFormLabeledField : UserControl
     
     private ComboBox GetComboBox(DynamicFormField formField)
     {
+        if (formField.Value is Enum)
+        {
+            return GetEnumComboBox(formField);
+        }
+        else if (formField.Attributes is DynamicFormComboBoxAttribute attributes)
+        {
+            var optionsProperty = formField.ParentObject.GetType().GetProperties()
+                .FirstOrDefault(x => x.Name == attributes.ComboBoxOptionsProperty);
 
-        var optionsProperty = formField.ParentObject.GetType().GetProperties()
+            if (optionsProperty == null)
+            {
+                throw new InvalidOperationException(
+                    "ComboBox specified without a ComboBoxOptionsProperty being designated");
+            }
+
+            var options = optionsProperty.GetValue(formField.ParentObject) as ICollection<string>;
+
+            if (options == null)
+            {
+                throw new InvalidOperationException("ComboBoxOptionsProperty must be a collection of strings");
+            }
+            
+            var control = new ComboBox() { ItemsSource = options, SelectedItem = formField.Value };
+        
+            control.SelectionChanged += (sender, args) =>
+            {
+                formField.Property.SetValue(formField.ParentObject, control.SelectedItem);
+            };
+        
+            if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
+            {
+                notifyPropertyChanged.PropertyChanged += (sender, args) =>
+                {
+                    if (args.PropertyName != formField.Property.Name)
+                    {
+                        return;
+                    }
+
+                    control.SelectedItem = formField.Property.GetValue(formField.ParentObject) as string;
+                };
+            }
+
+            return control;
+        }
+        else
+        {
+            throw new InvalidOperationException("Invalid DynamicFormField object for ComboBox");
+        }
+        
+        /*var optionsProperty = formField.ParentObject.GetType().GetProperties()
             .FirstOrDefault(x => x.Name == formField.Attributes.ComboBoxOptionsProperty);
 
         if (optionsProperty == null)
@@ -181,7 +242,7 @@ public class DynamicFormLabeledField : UserControl
             };
         }
 
-        return control;
+        return control;*/
     }
     
     private ComboBox GetEnumComboBox(DynamicFormField formField)
@@ -224,6 +285,127 @@ public class DynamicFormLabeledField : UserControl
                 control.SelectedItem = ((Enum)formField.Property.GetValue(formField.ParentObject)!).GetDescription();
             };
         }
+
+        return control;
+    }
+    
+    private Control GetSlider(DynamicFormField formField)
+    {
+        if (formField.Attributes is not DynamicFormSliderAttribute attributes)
+        {
+            throw new InvalidOperationException("Invalid DynamicFormField object for Slider");
+        }
+        
+        var decimalPlaces = attributes.DecimalPlaces;
+        if (formField.Value?.GetType() == typeof(int) || formField.Value?.GetType() == typeof(int?) || formField.Value?.GetType() == typeof(short) || formField.Value?.GetType() == typeof(short?))
+        {
+            decimalPlaces = 0;
+        }
+        
+        var incrementAmount = attributes.IncrementAmount;
+        if (Math.Abs(incrementAmount + 1) < .001)
+        {
+            incrementAmount = Math.Pow(0.1, decimalPlaces);
+        }
+        
+        var control = new DynamicFormSliderControl(formField.Value as double? ?? attributes.MinimumValue, attributes.MaximumValue, attributes.MinimumValue, incrementAmount, decimalPlaces, attributes.IsPercent);
+        
+        control.ValueChanged += (sender, args) =>
+        {
+            if (decimalPlaces == 0)
+            {
+                formField.Property.SetValue(formField.ParentObject, Convert.ToInt32(args.NewValue));
+            }
+            else
+            {
+                formField.Property.SetValue(formField.ParentObject, Convert.ToDouble(args.NewValue));
+            }
+        };
+        
+        if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
+        {
+            notifyPropertyChanged.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName != formField.Property.Name)
+                {
+                    return;
+                }
+
+                control.SetValue(Convert.ToDouble(formField.Property.GetValue(formField.ParentObject)));
+            };
+        }
+
+        return control;
+    }
+    
+    private Control GetColorPicker(DynamicFormField formField)
+    {
+        if (formField.Value is not byte[] bytes)
+        {
+            throw new InvalidOperationException("Invalid value type for ColorPicker");
+        }
+        
+        var control = new DynamicFormColorPicker(bytes);
+        
+        control.ValueChanged += (sender, args) =>
+        {
+            formField.Property.SetValue(formField.ParentObject, control.Value);
+        };
+
+        if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
+        {
+            notifyPropertyChanged.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName != formField.Property.Name)
+                {
+                    return;
+                }
+
+                control.SetValue(formField.Property.GetValue(formField.ParentObject) as byte[] ?? [0, 0, 0, 0]);
+            };
+        }
+
+        return control;
+    }
+
+    private Control GetFilePicker(DynamicFormField formField)
+    {
+        if (formField.Value is not string value || formField.Attributes is not DynamicFormFilePickerAttribute filePickerAttribute)
+        {
+            throw new InvalidOperationException("Invalid value type for ColorPicker");
+        }
+
+        var control = new DynamicFormFilePicker(filePickerAttribute, value);
+        
+        control.ValueChanged += (sender, args) =>
+        {
+            formField.Property.SetValue(formField.ParentObject, control.Value);
+        };
+
+        if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
+        {
+            notifyPropertyChanged.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName != formField.Property.Name)
+                {
+                    return;
+                }
+
+                control.SetValue(formField.Property.GetValue(formField.ParentObject) as string ?? "");
+            };
+        }
+
+        return control;
+    }
+    
+    private Control GetNumericUpDown(DynamicFormField formField)
+    {
+        if (formField.Attributes is not DynamicFormNumericUpDownAttribute attributes || formField.Value == null)
+        {
+            throw new InvalidOperationException("Invalid attribute type for NumericUpDown control");
+        }
+
+        var control = new DynamicFormNumericUpDown(attributes, formField.Value);
 
         return control;
     }

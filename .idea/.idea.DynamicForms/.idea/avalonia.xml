@@ -21,9 +21,11 @@
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormColorPicker.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormLabeledFieldSideBySide.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/Fields/DynamicFormSliderControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Groups/DynamicFormGroupStyleBasic.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Groups/DynamicFormGroupStyleExpander.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Groups/DynamicFormGroupStyleGroupBox.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/Groups/DynamicFormGroupTypeVertical.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Groups/DynamiocFormGroupStyleBasic.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Example.Avalonia/App.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Example.Avalonia/Views/MainWindow.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />

@@ -344,7 +344,7 @@ public class DynamicFormLabeledField : UserControl
     
     private Control GetNumericUpDown(DynamicFormField formField)
     {
-        if (formField.Attributes is not DynamicFormNumericAttribute attributes)
+        if (formField.Attributes is not DynamicFormNumericUpDownAttribute attributes)
         {
             throw new InvalidOperationException("Invalid attribute type for NumericUpDown control");
         }

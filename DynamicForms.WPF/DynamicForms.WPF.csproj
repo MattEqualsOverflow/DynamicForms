@@ -8,15 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Page Update="DynamicFormLabeledFieldVertical.xaml">
+      <ProjectReference Include="..\DynamicForms.Core\DynamicForms.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Fields\DynamicFormLabeledFieldVertical.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>
       </Page>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\DynamicForms.Core\DynamicForms.Core.csproj" />
     </ItemGroup>
 
 </Project>
