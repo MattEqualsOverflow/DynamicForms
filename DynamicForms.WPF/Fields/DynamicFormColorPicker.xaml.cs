@@ -19,14 +19,14 @@ public partial class DynamicFormColorPicker : UserControl
     public void SetValue(byte[] bytes)
     {
         ColorTextBox.Text = StringColorConverter.Convert(bytes);
-        ColorRectangle.Background = new SolidColorBrush(Color.FromArgb(bytes[0], bytes[1], bytes[2], bytes[3]));
+        ColorRectangle.Fill = new SolidColorBrush(Color.FromArgb(bytes[0], bytes[1], bytes[2], bytes[3]));
         Value = bytes;
     }
     
     private void ColorTextBox_OnTextChanged(object? sender, TextChangedEventArgs e)
     {
         var bytes = StringColorConverter.Convert(ColorTextBox.Text ?? "#00000000");
-        ColorRectangle.Background = new SolidColorBrush(Color.FromArgb(bytes[0], bytes[1], bytes[2], bytes[3]));
+        ColorRectangle.Fill = new SolidColorBrush(Color.FromArgb(bytes[0], bytes[1], bytes[2], bytes[3]));
         Value = bytes;
         ValueChanged?.Invoke(this, EventArgs.Empty);
     }

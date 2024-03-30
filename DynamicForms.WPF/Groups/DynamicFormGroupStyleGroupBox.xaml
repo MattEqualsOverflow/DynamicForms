@@ -6,7 +6,7 @@
                               xmlns:local="clr-namespace:DynamicForms.WPF.Groups"
                               mc:Ignorable="d"
                               d:DesignHeight="300" d:DesignWidth="300">
-    <GroupBox Name="MainPanel">
+    <GroupBox Name="MainPanel" Padding="0 3 0 0">
         
     </GroupBox>
 </local:DynamicFormGroupStyleControl>

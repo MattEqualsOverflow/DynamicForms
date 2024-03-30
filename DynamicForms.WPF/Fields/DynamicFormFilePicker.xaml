@@ -13,7 +13,7 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBox Grid.Column="0" IsReadOnly="True" Name="MainTextBox"></TextBox>
-        <Button Grid.Column="1" Name="BrowseButton" Margin="3 0" Padding="5 0" Click="BrowseButton_OnClick">Browse</Button>
+        <Button Grid.Column="1" Name="BrowseButton" Margin="3 0" Padding="5 0" Click="BrowseButton_OnClick">Browse...</Button>
         <Button Grid.Column="2" Name="ClearButton" Padding="5 0" FontSize="10" Click="ClearButton_OnClick">&#x2715;</Button>
     </Grid>
 </UserControl>

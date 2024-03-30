@@ -76,6 +76,8 @@ public partial class DynamicFormControl : UserControl
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
+        bool isFirst = true;
+
         foreach (var formObject in groupObjects)
         {
             if (formObject is DynamicFormField field)
@@ -85,12 +87,18 @@ public partial class DynamicFormControl : UserControl
             else if (formObject is DynamicFormGroup group)
             {
                 var subGroupControl = CreateFormGroup(group.GroupName, group.Style, group.Type, group.Objects);
+                if (!isFirst)
+                {
+                    subGroupControl.Margin = new Thickness(0, 5, 0, 0);
+                }
                 groupTypeControl.AddControl(subGroupControl);
             }
             else
             {
                 throw new InvalidOperationException($"Unknown object type {formObject.GetType().Name}");
             }
+
+            isFirst = false;
         }
         
         groupStyleControl.AddBody(groupTypeControl);
