@@ -18,8 +18,10 @@
         <entry key="DynamicForms.Avalonia/DynamicForms.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/DynamicFormsTextBlock.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/DynamicformCheckBox.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/Fields/DyamicFormEnableDisableReorderControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormColorPicker.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/Fields/DynamicFormEnableDisableReorderControlItem.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormLabeledFieldSideBySide.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormSliderControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Groups/DynamicFormGroupStyleBasic.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />

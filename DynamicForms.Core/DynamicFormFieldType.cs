@@ -9,5 +9,7 @@ public enum DynamicFormFieldType
     Slider,
     ColorPicker,
     FilePicker,
-    NumericUpDown
+    NumericUpDown,
+    EnableDisableReorderList,
+    Button
 }

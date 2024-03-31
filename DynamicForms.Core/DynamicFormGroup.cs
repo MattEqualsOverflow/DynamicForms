@@ -83,27 +83,45 @@ public class DynamicFormGroup : DynamicFormObject
     {
         List<DynamicFormObject> toReturn = [];
 
-        var items = parentObject.GetType().GetProperties()
-            .Select(x => (Property: x,
+        var properties = parentObject.GetType().GetProperties()
+            .Select(x => (IsProperty: true,
+                Property: x as object,
                 Attributes: x.GetCustomAttributes(true).FirstOrDefault(a => a is DynamicFormObjectAttribute)))
-            .Where(x => x.Attributes != null)
-            .OrderBy(x => ((DynamicFormObjectAttribute?)x.Attributes)?.Order ?? 1000);
+            .Where(x => x.Attributes != null);
+        
+        var events = parentObject.GetType().GetEvents()
+            .Select(x => (IsProperty: false,
+                Property: x as object,
+                Attributes: x.GetCustomAttributes(true).FirstOrDefault(a => a is DynamicFormObjectAttribute)))
+            .Where(x => x.Attributes != null);
+
+        var items = properties.Concat(events).OrderBy(x => ((DynamicFormObjectAttribute)x.Attributes!).Order);
         
         foreach (var item in items)
         {
-            var propValue = item.Property.GetValue(parentObject);
-            if (item.Attributes is DynamicFormFieldAttribute fieldAttribute)
+            if (item.IsProperty)
             {
-                toReturn.Add(new DynamicFormField(parentObject, propValue, item.Property, fieldAttribute, fieldAttribute.GroupName));
-            } 
-            else if (item.Attributes is DynamicFormObjectAttribute subObjectAttribute)
-            {
-                if (propValue == null)
+                var property = (PropertyInfo)item.Property;
+                var propValue = property.GetValue(parentObject);
+                if (item.Attributes is DynamicFormFieldAttribute fieldAttribute)
                 {
-                    throw new InvalidOperationException("DynamicFormGroups cannot be null");
-                }
+                    toReturn.Add(new DynamicFormField(parentObject, propValue, property, fieldAttribute, fieldAttribute.GroupName));
+                } 
+                else if (item.Attributes is DynamicFormObjectAttribute subObjectAttribute)
+                {
+                    if (propValue == null)
+                    {
+                        throw new InvalidOperationException("DynamicFormGroups cannot be null");
+                    }
                     
-                toReturn.Add(new DynamicFormGroup(propValue, subObjectAttribute.GroupName));
+                    toReturn.Add(new DynamicFormGroup(propValue, subObjectAttribute.GroupName));
+                }
+            }
+            else
+            {
+                var eventInfo = (EventInfo)item.Property;
+                var attribute = (DynamicFormButtonAttribute)item.Attributes!;
+                toReturn.Add(new DynamicFormField(parentObject, eventInfo.Name, null, attribute, attribute.GroupName));
             }
         }
 

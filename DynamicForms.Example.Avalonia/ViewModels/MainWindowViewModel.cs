@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
@@ -24,6 +25,11 @@ public class MainWindowViewModel : ViewModelBase
         
         using var shipStream = File.OpenRead("Shak's Stash by Phiggle.png");
         ShipSprite = Bitmap.DecodeToWidth(shipStream, 248);
+
+        Example.ButtonTest += (sender, args) =>
+        {
+            Console.WriteLine("Button pressed");
+        };
     }
 
     public Bitmap LinkSprite { get; set; }

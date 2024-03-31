@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Reflection;
 using Avalonia.Controls;
 using AvaloniaControls;
 using AvaloniaControls.Controls;
@@ -38,6 +39,12 @@ public class DynamicFormLabeledField : UserControl
                 break;
             case DynamicFormFieldType.NumericUpDown:
                 BodyControl = GetNumericUpDown(formField);
+                break;
+            case DynamicFormFieldType.EnableDisableReorderList:
+                BodyControl = GetEnableDisableReorderList(formField);
+                break;
+            case DynamicFormFieldType.Button:
+                BodyControl = GetButton(formField);
                 break;
             default:
                 throw new InvalidOperationException("Unknown DynamicFormFieldType");
@@ -86,19 +93,19 @@ public class DynamicFormLabeledField : UserControl
 
         control.TextChanged += (sender, args) =>
         {
-            formField.Property.SetValue(formField.ParentObject, control.Text);
+            formField.SetValue(formField.ParentObject, control.Text);
         };
         
         if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
         {
             notifyPropertyChanged.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName != formField.Property.Name)
+                if (args.PropertyName != formField.PropertyName)
                 {
                     return;
                 }
 
-                control.Text = formField.Property.GetValue(formField.ParentObject) as string ?? "";
+                control.Text = formField.GetValue(formField.ParentObject) as string ?? "";
             };
         }
 
@@ -113,12 +120,12 @@ public class DynamicFormLabeledField : UserControl
         {
             notifyPropertyChanged.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName != formField.Property.Name)
+                if (args.PropertyName != formField.PropertyName)
                 {
                     return;
                 }
 
-                control.Text = formField.Property.GetValue(formField.ParentObject) as string ?? "";
+                control.Text = formField.GetValue(formField.ParentObject) as string ?? "";
             };
         }
 
@@ -131,19 +138,19 @@ public class DynamicFormLabeledField : UserControl
         
         control.IsCheckedChanged += (sender, args) =>
         {
-            formField.Property.SetValue(formField.ParentObject, control.IsChecked);
+            formField.SetValue(formField.ParentObject, control.IsChecked);
         };
         
         if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
         {
             notifyPropertyChanged.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName != formField.Property.Name)
+                if (args.PropertyName != formField.PropertyName)
                 {
                     return;
                 }
 
-                control.IsChecked = formField.Property.GetValue(formField.ParentObject) as bool?;
+                control.IsChecked = formField.GetValue(formField.ParentObject) as bool?;
             };
         }
 
@@ -158,19 +165,19 @@ public class DynamicFormLabeledField : UserControl
         
             control.ValueChanged += (sender, args) =>
             {
-                formField.Property.SetValue(formField.ParentObject, control.Value);
+                formField.SetValue(formField.ParentObject, control.Value);
             };
         
             if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
             {
                 notifyPropertyChanged.PropertyChanged += (sender, args) =>
                 {
-                    if (args.PropertyName != formField.Property.Name)
+                    if (args.PropertyName != formField.PropertyName)
                     {
                         return;
                     }
 
-                    control.Value = formField.Property.GetValue(formField.ParentObject);
+                    control.Value = formField.GetValue(formField.ParentObject);
                 };
             }
         
@@ -198,19 +205,19 @@ public class DynamicFormLabeledField : UserControl
         
             control.SelectionChanged += (sender, args) =>
             {
-                formField.Property.SetValue(formField.ParentObject, control.SelectedItem);
+                formField.SetValue(formField.ParentObject, control.SelectedItem);
             };
         
             if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
             {
                 notifyPropertyChanged.PropertyChanged += (sender, args) =>
                 {
-                    if (args.PropertyName != formField.Property.Name)
+                    if (args.PropertyName != formField.PropertyName)
                     {
                         return;
                     }
 
-                    control.SelectedItem = formField.Property.GetValue(formField.ParentObject) as string;
+                    control.SelectedItem = formField.GetValue(formField.ParentObject) as string;
                 };
             }
 
@@ -247,11 +254,11 @@ public class DynamicFormLabeledField : UserControl
         {
             if (decimalPlaces == 0)
             {
-                formField.Property.SetValue(formField.ParentObject, Convert.ToInt32(args.NewValue));
+                formField.SetValue(formField.ParentObject, Convert.ToInt32(args.NewValue));
             }
             else
             {
-                formField.Property.SetValue(formField.ParentObject, Convert.ToDouble(args.NewValue));
+                formField.SetValue(formField.ParentObject, Convert.ToDouble(args.NewValue));
             }
         };
         
@@ -259,12 +266,12 @@ public class DynamicFormLabeledField : UserControl
         {
             notifyPropertyChanged.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName != formField.Property.Name)
+                if (args.PropertyName != formField.PropertyName)
                 {
                     return;
                 }
 
-                control.SetValue(Convert.ToDouble(formField.Property.GetValue(formField.ParentObject)));
+                control.SetValue(Convert.ToDouble(formField.GetValue(formField.ParentObject)));
             };
         }
 
@@ -282,19 +289,19 @@ public class DynamicFormLabeledField : UserControl
         
         control.ValueChanged += (sender, args) =>
         {
-            formField.Property.SetValue(formField.ParentObject, control.Value);
+            formField.SetValue(formField.ParentObject, control.Value);
         };
 
         if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
         {
             notifyPropertyChanged.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName != formField.Property.Name)
+                if (args.PropertyName != formField.PropertyName)
                 {
                     return;
                 }
 
-                control.SetValue(formField.Property.GetValue(formField.ParentObject) as byte[] ?? [0, 0, 0, 0]);
+                control.SetValue(formField.GetValue(formField.ParentObject) as byte[] ?? [0, 0, 0, 0]);
             };
         }
 
@@ -323,19 +330,19 @@ public class DynamicFormLabeledField : UserControl
         
         control.OnUpdated += (sender, args) =>
         {
-            formField.Property.SetValue(formField.ParentObject, control.FilePath);
+            formField.SetValue(formField.ParentObject, control.FilePath);
         };
 
         if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
         {
             notifyPropertyChanged.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName != formField.Property.Name)
+                if (args.PropertyName != formField.PropertyName)
                 {
                     return;
                 }
 
-                control.FilePath = formField.Property.GetValue(formField.ParentObject) as string ?? "";
+                control.FilePath = formField.GetValue(formField.ParentObject) as string ?? "";
             };
         }
 
@@ -361,15 +368,15 @@ public class DynamicFormLabeledField : UserControl
         {
             if (formField.Value is int)
             {
-                formField.Property.SetValue(formField.ParentObject, Convert.ToInt16(control.Value));
+                formField.SetValue(formField.ParentObject, Convert.ToInt16(control.Value));
             }
             else if (formField.Value is double)
             {
-                formField.Property.SetValue(formField.ParentObject, Convert.ToDouble(control.Value));
+                formField.SetValue(formField.ParentObject, Convert.ToDouble(control.Value));
             }
             else
             {
-                formField.Property.SetValue(formField.ParentObject, control.Value);
+                formField.SetValue(formField.ParentObject, control.Value);
             }
         };
         
@@ -377,14 +384,83 @@ public class DynamicFormLabeledField : UserControl
         {
             notifyPropertyChanged.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName != formField.Property.Name)
+                if (args.PropertyName != formField.PropertyName)
                 {
                     return;
                 }
 
-                control.Value = Convert.ToDecimal(formField.Property.GetValue(formField.ParentObject));
+                control.Value = Convert.ToDecimal(formField.GetValue(formField.ParentObject));
             };
         }
+
+        return control;
+    }
+    
+    private Control GetEnableDisableReorderList(DynamicFormField formField)
+    {
+        if (formField.Attributes is not DynamicFormEnableDisableReorderAttribute attributes)
+        {
+            throw new InvalidOperationException("Invalid attribute type for EnableDisableReorder control");
+        }
+
+        if (formField.Value is not ICollection<string> selectedOptions)
+        {
+            throw new InvalidOperationException("EnableDisableReorder must be of type ICollection<string>");
+        }
+
+        var optionsProperty = formField.ParentObject.GetType().GetProperties()
+                                  .FirstOrDefault(x => x.Name == attributes.OptionsProperty)
+                              ?? throw new InvalidOperationException(
+                                  $"Options property {attributes.OptionsProperty} for {formField.Attributes.DisplayName} was not found");
+
+        if (optionsProperty.GetValue(formField.ParentObject) is not ICollection<string> options)
+        {
+            throw new InvalidOperationException("OptionsProperty must be of type ICollection>string>");
+        }
+        
+        var control = new DynamicFormEnableDisableReorderControl(options, selectedOptions);
+
+        control.ValueUpdated += (sender, args) =>
+        {
+            formField.SetValue(formField.ParentObject, control.GetValue());
+        };
+
+        if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
+        {
+            notifyPropertyChanged.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName != formField.PropertyName)
+                {
+                    return;
+                }
+
+                control.SetValue(formField.GetValue(formField.ParentObject) as ICollection<string> ?? []);
+            };
+        }
+
+        return control;
+    }
+    
+    private Control GetButton(DynamicFormField formField)
+    {
+        var eventName = formField.Value as string;
+        
+        if (string.IsNullOrEmpty(eventName))
+        {
+            throw new InvalidOperationException("Invalid button event name");
+        }
+
+        var control = new Button() { Content = formField.Attributes.DisplayName };
+
+        control.Click += (sender, args) =>
+        {
+            var parentObject = formField.ParentObject;
+            ((Delegate)parentObject
+                    .GetType()
+                    .GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .GetValue(parentObject)!)
+                .DynamicInvoke(parentObject, EventArgs.Empty);
+        };
 
         return control;
     }

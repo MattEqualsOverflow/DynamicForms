@@ -78,6 +78,14 @@ public class ExampleSettings : INotifyPropertyChanged
 
     [DynamicFormObject("Group 1")]
     public ExampleSubObject SubObject { get; set; } = new();
+
+    [DynamicFormEnableDisableReorder("Enable Disable Reorder", nameof(EnableDisableReorderOptions))]
+    public string[] EnableDisableReorder { get; set; } = ["Five", "Two", "One"];
+
+    [DynamicFormButton("Test Button", order: 5)]
+    public event EventHandler? ButtonTest;
+    
+    public string[] EnableDisableReorderOptions { get; set; } = ["One", "Two", "Three", "Four", "Five"];
     
     public bool IsEditable { get; set; } = true;
     

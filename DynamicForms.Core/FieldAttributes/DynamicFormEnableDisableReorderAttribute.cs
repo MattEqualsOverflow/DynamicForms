@@ -1,0 +1,17 @@
+namespace DynamicForms.Core.FieldAttributes;
+
+[AttributeUsage((AttributeTargets.Property))]
+public class DynamicFormEnableDisableReorderAttribute(
+    string displayName,
+    string optionsProperty,
+    string? hintText = null,
+    string? visibleWhenProperty = null,
+    string? editableWhenProperty = null,
+    string groupName = "",
+    int order = 1000)
+    : DynamicFormFieldAttribute(displayName, hintText, visibleWhenProperty, editableWhenProperty, groupName, order)
+{
+    public override DynamicFormFieldType FieldType => DynamicFormFieldType.EnableDisableReorderList;
+
+    public string OptionsProperty => optionsProperty;
+}
