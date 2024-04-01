@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using DynamicForms.Core;
@@ -38,6 +39,12 @@ public class DynamicFormLabeledField : UserControl
                 break;
             case DynamicFormFieldType.NumericUpDown:
                 BodyControl = GetNumericUpDown(formField);
+                break;
+            case DynamicFormFieldType.EnableDisableReorderList:
+                BodyControl = GetEnableDisableReorderList(formField);
+                break;
+            case DynamicFormFieldType.Button:
+                BodyControl = GetButton(formField);
                 break;
             default:
                 throw new InvalidOperationException("Unknown DynamicFormFieldType");
@@ -406,6 +413,75 @@ public class DynamicFormLabeledField : UserControl
         }
 
         var control = new DynamicFormNumericUpDown(attributes, formField.Value);
+
+        return control;
+    }
+    
+    private Control GetEnableDisableReorderList(DynamicFormField formField)
+    {
+        if (formField.Attributes is not DynamicFormEnableDisableReorderAttribute attributes)
+        {
+            throw new InvalidOperationException("Invalid attribute type for EnableDisableReorder control");
+        }
+
+        if (formField.Value is not ICollection<string> selectedOptions)
+        {
+            throw new InvalidOperationException("EnableDisableReorder must be of type ICollection<string>");
+        }
+
+        var optionsProperty = formField.ParentObject.GetType().GetProperties()
+                                  .FirstOrDefault(x => x.Name == attributes.OptionsProperty)
+                              ?? throw new InvalidOperationException(
+                                  $"Options property {attributes.OptionsProperty} for {formField.Attributes.DisplayName} was not found");
+
+        if (optionsProperty.GetValue(formField.ParentObject) is not ICollection<string> options)
+        {
+            throw new InvalidOperationException("OptionsProperty must be of type ICollection>string>");
+        }
+        
+        var control = new DynamicFormEnableDisableReorderControl(options, selectedOptions);
+
+        control.ValueUpdated += (sender, args) =>
+        {
+            formField.SetValue(formField.ParentObject, control.GetValue());
+        };
+
+        if (formField.ParentObject is INotifyPropertyChanged notifyPropertyChanged)
+        {
+            notifyPropertyChanged.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName != formField.PropertyName)
+                {
+                    return;
+                }
+
+                control.SetValue(formField.GetValue(formField.ParentObject) as ICollection<string> ?? []);
+            };
+        }
+
+        return control;
+    }
+    
+    private Control GetButton(DynamicFormField formField)
+    {
+        var eventName = formField.Value as string;
+        
+        if (string.IsNullOrEmpty(eventName))
+        {
+            throw new InvalidOperationException("Invalid button event name");
+        }
+
+        var control = new Button() { Content = formField.Attributes.DisplayName };
+
+        control.Click += (sender, args) =>
+        {
+            var parentObject = formField.ParentObject;
+            ((Delegate?)parentObject
+                    .GetType()
+                    .GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .GetValue(parentObject))?
+                .DynamicInvoke(parentObject, EventArgs.Empty);
+        };
 
         return control;
     }

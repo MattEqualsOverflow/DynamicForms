@@ -21,6 +21,7 @@
         <entry key="DynamicForms.Avalonia/Fields/DyamicFormEnableDisableReorderControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormColorPicker.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
+        <entry key="DynamicForms.Avalonia/Fields/DynamicFormEnableDisableReorderControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormEnableDisableReorderControlItem.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormLabeledFieldSideBySide.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />
         <entry key="DynamicForms.Avalonia/Fields/DynamicFormSliderControl.axaml" value="DynamicForms.Example.Avalonia/DynamicForms.Example.Avalonia.csproj" />

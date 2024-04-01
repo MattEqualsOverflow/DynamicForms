@@ -11,7 +11,12 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        DataContext = new MainWindowViewModel();
+        var viewModel = new MainWindowViewModel();
+        viewModel.ExampleSettings.ButtonTest += (sender, args) =>
+        {
+            Console.WriteLine("Button pressed");
+        };
+        DataContext = viewModel;
     }
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
